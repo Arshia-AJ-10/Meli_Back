@@ -12,7 +12,7 @@ class CategoryController extends Controller
 {
     public function list()
     {
-        $categoray = Categoray::orderBy('order')->get();
+        $categoray = Categoray::withTrashed()->orderBy('order')->get();
         return response()->json([
             'success' => true,
             'categorays' => $categoray

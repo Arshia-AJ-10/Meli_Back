@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,8 +18,20 @@ Route::get('/products/{id}', [ProductController::class, 'det']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
-    
+
     Route::post('/rate/{id}', [ProductController::class, 'rate']);
+
+    Route::prefix('/cart')->group(function () {
+        Route::get('/', [CartController::class, 'index']);
+        Route::post('/{id}', [CartController::class, 'add']);
+        Route::delete('/{id}', [CartController::class, 'delete']);
+    });
+
+    Route::prefix('/orders')->group(function () {
+        Route::get('/', [OrderController::class, 'index']);
+        Route::get('/{id}', [OrderController::class, 'det']);
+        Route::post('/', [OrderController::class, 'buy']);
+    });
 
     Route::prefix('admin')->middleware(['admin'])->group(function () {
         Route::prefix('/categories')->group(function () {
@@ -28,10 +42,10 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/reorder', [CategoryController::class, 'reorder']);
         });
         Route::prefix('/products')->group(function () {
-            Route::get('/',[ProductController::class, 'crud']);
-            Route::post('/',[ProductController::class, 'store']);
-            Route::put('/{id}',[ProductController::class, 'edit']);
-            Route::delete('/{id}',[ProductController::class, 'delete']);
+            Route::get('/', [ProductController::class, 'crud']);
+            Route::post('/', [ProductController::class, 'store']);
+            Route::put('/{id}', [ProductController::class, 'edit']);
+            Route::delete('/{id}', [ProductController::class, 'delete']);
         });
     });
 });

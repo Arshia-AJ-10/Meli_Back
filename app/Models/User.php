@@ -48,7 +48,11 @@ class User extends Authenticatable
     public function products()
     {
         return $this->belongsToMany(Product::class, 'user_products')
-            ->withPivot('rating','text')
+            ->withPivot('rating', 'text')
             ->withTimestamps();
+    }
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
     }
 }

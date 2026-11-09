@@ -5,6 +5,7 @@ use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,12 +16,14 @@ Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::get('/products', [ProductController::class, 'list']);
 Route::get('/products/{id}', [ProductController::class, 'det']);
 
+Route::get('/products/{id}/reviews', [ReviewController::class, 'index']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
 
-    Route::post('/rate/{id}', [ProductController::class, 'rate']);
-
+    Route::post('/products/{id}/reviews', [ReviewController::class, 'rate']);
+    
     Route::prefix('/cart')->group(function () {
         Route::get('/', [CartController::class, 'index']);
         Route::post('/{id}', [CartController::class, 'add']);

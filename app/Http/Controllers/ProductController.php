@@ -156,37 +156,4 @@ class ProductController extends Controller
             'product' => $product
         ], 200);
     }
-    public function rate(Request $req, $id)
-    {
-        $product = Product::findOrFail($id);
-        $validator = Validator::make($req->all(), [
-            'rate' => 'required|integer|min:1|max:5',
-            'text' => 'nullable|string|max:2000',
-        ], [
-            'rate.required' => 'ثبت امتیاز الزامی است.',
-            'rate.integer' => 'امتیاز باید عددی باشد.',
-            'rate.min' => 'حداقل امتیاز ۱ است.',
-            'rate.max' => 'حداکثر امتیاز ۵ است.',
-            'text.string' => 'متن نظر باید رشته باشد.',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        $rate = new UserProduct();
-        $rate->rate = $req->rate;
-        $rate->user_id = $req->user()->id;
-        $rate->text = $req->text;
-        $rate->product_id = $product->id;
-        $rate->save();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'نمره با موفقیت ثبت شد.',
-        ], 200);
-    }
 }
